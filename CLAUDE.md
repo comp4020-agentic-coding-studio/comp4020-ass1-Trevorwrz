@@ -160,3 +160,42 @@ catching you out, a fact about the stack the agent keeps getting wrong --- write
 it down here. Growing this file is the work of harness engineering, and the gap
 between this boilerplate and your own version is part of what your prototype
 says about the developer you're becoming.
+
+## Assignment 1: Interactive explainer — Bloom filters
+
+Not carrying anything forward from C2's CLAUDE.md: that content was entirely
+specific to redesigning 4399.com (verifying a real company's facts, real
+game links) and none of it generalises to this brief.
+
+**The idea, one sentence:** how does your browser check a URL against
+billions of known-bad sites without downloading the list — a structure that's
+allowed to lie sometimes, and this page is the moment it lies to you.
+
+**The one mechanic (nothing else):**
+
+- A visible bit array (a row of cells). Visitors **add** words to a set —
+  each add runs real hash functions and lights up the corresponding bits.
+- Visitors then **query** any word. The result is "probably in set" (green)
+  or "definitely not in set" (red) — read directly off the same bit array,
+  not from a lookup table of what was actually added.
+- The point of the whole page is the moment a visitor queries something they
+  never added and gets a false positive. That has to actually happen live,
+  from the real bit array, not be staged.
+
+Hard rules:
+
+- **This week JS is not just allowed, it's required** — unlike C1/C2, the
+  spec's core-interaction line ("the visitor does something that changes
+  what they see") can't be met with zero script. Real hash functions, real
+  bit array, real state changes.
+- **No lookup table pretending to be the filter.** The green/red answer must
+  be computed from the actual bit array's current state (query the same
+  bits the adds set), not from a `Set` of remembered words with a fake bloom
+  skin on top — the whole brief is demonstrating a real false-positive rate,
+  not a scripted one.
+- **Stay to one mechanic.** No second dataset, no unrelated feature bolted
+  on. Everything on the page serves "watch the filter lie to you."
+- Keep the template's Vite/TS pipeline as-is — this week actually needs it.
+- `spec/assignment-1.test.ts` (once written) encodes the core interaction so
+  it's testable, per the spec line "state the core interaction plainly
+  enough to write a test for it."
