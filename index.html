@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>COMP4020 prototype</title>
+    <title>Your drought isn't bad luck</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
@@ -13,11 +13,71 @@
       </nav>
     </header>
     <main>
-      <h1>COMP4020 prototype</h1>
-      <p data-testid="intro">
-        Replace this with your prototype. This week's brief is on the course website;
-        <code>spec/README.md</code> explains how the checks in this repo relate to it.
+      <h1>Your drought isn't bad luck</h1>
+      <p class="lede">
+        Gacha games publish a rare-drop rate around 0.6% — about 1 in 167
+        pulls, on average. "On average" is doing a lot of work in that
+        sentence. Pull for real below, and watch where you actually land on
+        the real spread of outcomes.
       </p>
+
+      <section class="puller" aria-labelledby="puller-heading">
+        <h2 id="puller-heading" class="visually-hidden">Pull</h2>
+
+        <div class="card" id="card" data-state="idle" aria-live="polite">
+          <span id="card-label">ready</span>
+        </div>
+
+        <button id="pull-button" type="button">Pull (0.6% SSR)</button>
+
+        <dl class="stats" data-testid="stats">
+          <div>
+            <dt>Pulls since last SSR</dt>
+            <dd id="stat-streak">0</dd>
+          </div>
+          <div>
+            <dt>Total pulls</dt>
+            <dd id="stat-total">0</dd>
+          </div>
+          <div>
+            <dt>Total SSRs</dt>
+            <dd id="stat-ssrs">0</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="histogram-section" aria-labelledby="histogram-heading">
+        <h2 id="histogram-heading">
+          Where a drought this long lands, out of 5,000 simulated players
+        </h2>
+        <p class="histogram-sub">
+          Same 0.6% rate as your pulls above, run once for 5,000 independent
+          players. The marker shows your current streak.
+        </p>
+        <div class="histogram" id="histogram" role="img" aria-label="Histogram of pulls until first SSR across 5000 simulated players"></div>
+      </section>
+
+      <section class="explainer">
+        <h2>Why this isn't the game cheating you</h2>
+        <p>
+          Every pull is independent — the game has no memory of your last
+          166 misses. A drought feels wrong because your brain expects the
+          average (166 pulls) to be roughly what actually happens every
+          time. It isn't: with a 0.6% rate, some players get the rare drop
+          on pull 3, and a meaningful slice of players are still empty-handed
+          past pull 400 — both are exactly what the same fair coin produces.
+          The histogram above is that population. If your marker sits deep
+          in the tail, you're not unlucky in a way that needs explaining;
+          you're a normal, expected outcome of the distribution.
+        </p>
+        <p>
+          One thing this demo deliberately leaves out: most real gacha
+          games add a "pity" system that guarantees the rare drop after a
+          fixed number of tries. That's a second mechanic layered on top of
+          the probability — this page shows what the probability alone
+          feels like, without that safety net.
+        </p>
+      </section>
     </main>
     <script type="module" src="./main.ts"></script>
   </body>

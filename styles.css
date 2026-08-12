@@ -1,16 +1,172 @@
+:root {
+  --ink: #16161d;
+  --muted: #5c5c6e;
+  --paper: #fbfaf7;
+  --card-bg: #fff;
+  --line: #e3e1da;
+  --accent: #6b3fd6;
+  --ssr: #c8940a;
+  --ssr-bg: #fff6dc;
+  --common-bg: #f2f1ec;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  padding: 2rem;
+  padding: 2rem 1.25rem 4rem;
   font-family: system-ui, sans-serif;
   line-height: 1.6;
-  color: #1a1a1a;
+  color: var(--ink);
+  background: var(--paper);
 }
 
 main {
-  max-width: 40rem;
+  max-width: 42rem;
   margin: 0 auto;
 }
 
 a {
-  color: #0b5fff;
+  color: var(--accent);
+}
+
+h1 {
+  font-size: 1.7rem;
+  margin: 0 0 0.6rem;
+}
+
+.lede {
+  color: var(--muted);
+  margin: 0 0 2rem;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.puller {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 1.75rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.card {
+  width: 8rem;
+  height: 8rem;
+  margin: 0 auto 1.25rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: var(--common-bg);
+  color: var(--muted);
+  transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.card[data-state="ssr"] {
+  background: var(--ssr-bg);
+  color: var(--ssr);
+  transform: scale(1.08);
+}
+
+.card[data-state="common"] {
+  transform: scale(1);
+}
+
+#pull-button {
+  padding: 0.7rem 1.4rem;
+  border: none;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+#pull-button:hover {
+  filter: brightness(1.08);
+}
+
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin: 1.5rem 0 0;
+}
+
+.stats div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stats dt {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.stats dd {
+  margin: 0.15rem 0 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.histogram-section {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.histogram-section h2 {
+  font-size: 1rem;
+  margin: 0 0 0.35rem;
+}
+
+.histogram-sub {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 0 0 1.25rem;
+}
+
+.histogram {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 8rem;
+}
+
+.bar {
+  flex: 1;
+  min-width: 2px;
+  background: var(--line);
+  border-radius: 2px 2px 0 0;
+}
+
+.bar.marker {
+  background: var(--accent);
+}
+
+.explainer h2 {
+  font-size: 1.1rem;
+}
+
+.explainer p {
+  color: var(--muted);
 }
