@@ -1,76 +1,73 @@
 # Process overview
 
-<!-- TEMPLATE: this file is a shape to fill in, not a form. Replace everything
-     in it with your own overview, and delete this comment — `pnpm
-     check:evidence` will remind you if it's still here. -->
-
-A reading-guide to how the work came together --- a map to your process, not an
-essay about it. Markers read this file and follow its citations; they don't
-trawl the repo for evidence you didn't point at, so if a moment mattered, cite
-it.
-
-This file is the shape; the course site's
-[assessment page](https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio/topics/assessment/#what-you-submit)
-is the requirement, and its
-[word counts](https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio/topics/assessment/#word-counts)
-cover every deliverable.
+A reading-guide to how the work came together.
 
 ## What I built
 
-One paragraph: the thing, and the idea behind it.
+A page with one mechanic: a Pull button that draws, for real, at a 0.6% SSR
+rate — the base rate several real gacha games publish — with live stats and a
+histogram of "pull number of the first SSR" across 5,000 simulated players,
+marked with where your own current drought actually sits. The idea is that a
+300-pull drought feels like the game cheating you until you see it's an
+ordinary point in a real distribution, not an outlier.
 
 ## The moments that mattered
 
-Three or four for an assignment; fewer is fine for a weekly prototype. Keep the
-list short so each moment has room to do all four jobs:
-
-1. **what happened** --- the problem, or the thing the agent got wrong
-2. **what you did instead of the obvious thing** --- the call you made, and why
-   it beat the obvious one
-3. **how you knew it was right** --- the check you ran, the viewport you looked
-   at, what you read before accepting the diff
-4. **the citation** --- a commit or commit range, a `CLAUDE.md` change, a check
-   that went from red to green, a prompt paired with the commit it produced
-
-Jobs 2 and 3 are the ones the repo can't tell a reader on its own, so they're
-where the marks are. The strongest moments are the ones where a correction
-landed in the **harness** rather than in another prompt --- a rule added to
-`CLAUDE.md`, a check wired up, an attempt thrown away: re-prompting until it
-passes is the routine case, and changing what the agent works against is the
-skilled one.
-
-Cite each moment as a link whose text is the commit hash or range and whose
-target is this repo's commit or compare URL, so a reader clicks straight to the
-evidence:
-
-- one commit: [`a1b2c3d`](https://github.com/YOUR-ORG/YOUR-REPO/commit/a1b2c3d)
-- a range:
-  [`a1b2c3d...e4f5a6b`](https://github.com/YOUR-ORG/YOUR-REPO/compare/a1b2c3d...e4f5a6b)
-
-To pair a prompt with the commit it produced, quote the prompt (curated, not a
-full transcript) next to the citation:
-
-> the prompt, verbatim
-
-Screenshots are welcome where one carries the verification better than a
-sentence does. Commit the file to this repo and link it with a **relative**
-path, which is what makes it render on GitHub: `![alt text](docs/before.png)`.
-Images don't count towards the word count and don't replace the citation.
-
-### A worked moment, for shape
-
-Delete this section along with the rest of the boilerplate --- it's here to show
-the four jobs in one paragraph, not to be imitated in content.
-
-> The date formatter kept coming back with `toLocaleDateString()` and no locale
-> argument, so the same build rendered differently on my machine and in CI. I'd
-> already re-prompted it twice, which fixed the line but not the habit, so the
-> third time I put the rule in `CLAUDE.md` instead
-> ([`3f9ac21`](https://github.com/YOUR-ORG/YOUR-REPO/commit/3f9ac21)) and added
-> a spec test that fails on a bare `toLocaleDateString`. That's what told me it
-> had actually taken: the test went red against the old code and green against
-> the new, and the next two features it wrote passed it without prompting
-> ([`3f9ac21...b7e0d14`](https://github.com/YOUR-ORG/YOUR-REPO/compare/3f9ac21...b7e0d14)).
+> **1. Choosing what "interactive" should mean, not just what's buildable.**
+> The first version of this brief was a bloom filter — hash a word in, show
+> the bits flip, demonstrate a false positive. It was well underway before I
+> stopped and reconsidered: a hash collision is abstract, and nothing about it
+> is personal to the person looking at it. A gacha drought is something a
+> reader already has a gut feeling about, and that gut feeling is usually
+> wrong. So I discarded the bloom filter before writing any prototype code and
+> rewrote `CLAUDE.md`'s brief around the drought instead
+> ([`0cb64af`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass1-Trevorwrz/commit/0cb64af)).
+> I knew it was the right call because the one-sentence pitch got sharper:
+> "check this against your own result" is something a reader can actually do
+> by looking at their own marker on the histogram, and a hash collision never
+> gave a visitor anything to check against themselves.
+>
+> **2. Ruling out a pity system before writing any code.** Real gacha games
+> almost all guarantee the rare drop after N tries, and it would have been
+> easy to add "for realism." I wrote **no pity system** into `CLAUDE.md` as a
+> hard rule before touching `main.ts`
+> ([`0cb64af`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass1-Trevorwrz/commit/0cb64af)),
+> rather than leaving it as a maybe. A second mechanic would let a reader
+> attribute any outcome to "the game guaranteeing it eventually," which
+> quietly defeats the point of showing pure independent probability. The
+> explainer section on the page says this out loud rather than silently
+> leaving it out, which is how I checked the rule actually held once the page
+> was built
+> ([`5cd44a5`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass1-Trevorwrz/commit/5cd44a5)).
+>
+> **3. Making the histogram trustworthy, not just plausible.** The easy path
+> is a closed-form geometric-distribution curve plotted as a line. Instead
+> `buildPopulationHistogram()` runs the same `drawIsSSR()` function the live
+> Pull button calls, 5,000 times, so the chart is real simulated data, not a
+> formula standing in for it
+> ([`5cd44a5`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass1-Trevorwrz/commit/5cd44a5)).
+> I checked this was sane with a standalone run of the same logic: mean 163.4
+> pulls against a theoretical 166.7, median 120, and 16.7% of simulated
+> players still empty past 300 pulls — close enough to the closed form to
+> trust the simulation, and the 16.7% figure is what ended up in the page's
+> own explainer text.
+>
+> **4. Testing the interaction, not just the shipped markup.** The starter
+> spec test only parsed the built `dist/index.html` with JSDOM and checked
+> that one element existed — it never ran `main.ts`, so a broken click handler
+> would still ship green. I replaced it with `spec/assignment-1.test.ts`,
+> which runs in a real jsdom environment, mocks `Math.random` to force a miss
+> and then a hit, and asserts the DOM actually updates — pull count, streak,
+> SSR count, card state — rather than asserting an element is merely present
+> ([`adf5309`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass1-Trevorwrz/commit/adf5309)).
+> I trusted it once `pnpm check` went from the starter's single static
+> assertion to 17 passing tests that fail immediately if the click handler
+> regresses, and then confirmed the real thing in a real browser by running
+> `pnpm dev` and clicking Pull myself — after first tracking down a local
+> `corepack` permissions problem that had been silently blocking `pnpm` from
+> installing at all — and watching the card, stats, and histogram marker move
+> exactly as the mocked test predicted
+> ([`5cd44a5`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass1-Trevorwrz/commit/5cd44a5)).
 
 ## Before you ship
 
