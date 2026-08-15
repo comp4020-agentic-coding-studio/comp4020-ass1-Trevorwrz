@@ -38,6 +38,8 @@ const maxBucketCount = Math.max(...populationBuckets);
 const cardEl = document.getElementById("card")!;
 const cardLabelEl = document.getElementById("card-label")!;
 const pullButton = document.getElementById("pull-button") as HTMLButtonElement;
+const pullTenButton = document.getElementById("pull-ten-button") as HTMLButtonElement;
+const tenPullResultsEl = document.getElementById("ten-pull-results")!;
 const streakEl = document.getElementById("stat-streak")!;
 const totalEl = document.getElementById("stat-total")!;
 const ssrsEl = document.getElementById("stat-ssrs")!;
@@ -72,7 +74,9 @@ function renderStats() {
   ssrsEl.textContent = String(totalSSRs);
 }
 
-pullButton.addEventListener("click", () => {
+// One draw, real and independent — the ×10 button below is this run ten
+// times in a row, not a different mechanic with better odds.
+function performPull(): boolean {
   totalPulls++;
   const hit = drawIsSSR();
 
@@ -87,6 +91,29 @@ pullButton.addEventListener("click", () => {
     cardLabelEl.textContent = "common";
   }
 
+  return hit;
+}
+
+function renderTenPullResults(hits: boolean[]) {
+  tenPullResultsEl.innerHTML = "";
+  for (const hit of hits) {
+    const chip = document.createElement("div");
+    chip.className = "chip" + (hit ? " ssr" : "");
+    tenPullResultsEl.appendChild(chip);
+  }
+  const ssrCount = hits.filter(Boolean).length;
+  tenPullResultsEl.setAttribute("aria-label", `Last ×10 pull: ${ssrCount} of 10 were SSR.`);
+}
+
+pullButton.addEventListener("click", () => {
+  performPull();
+  renderStats();
+  renderHistogram();
+});
+
+pullTenButton.addEventListener("click", () => {
+  const hits = Array.from({ length: 10 }, () => performPull());
+  renderTenPullResults(hits);
   renderStats();
   renderHistogram();
 });

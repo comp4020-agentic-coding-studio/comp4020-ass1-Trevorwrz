@@ -177,7 +177,10 @@ you can see it isn't.
 **The one mechanic (nothing else):**
 
 - A **Pull** button draws for real, independently, at a fixed rate
-  (0.6% SSR — the real base rate several actual gacha games publish).
+  (0.6% SSR — the real base rate several actual gacha games publish). A
+  **Pull ×10** button runs the exact same draw ten times in a row (real
+  gacha convention) — it is the same mechanic run in a loop, not a second
+  one, and it doesn't touch the rate or add any guarantee.
 - Live stats: pulls since your last SSR, total pulls, total SSRs.
 - A **histogram** of "pull number of the first SSR" across a simulated
   population (several thousand virtual players, same 0.6% rate, run once on
